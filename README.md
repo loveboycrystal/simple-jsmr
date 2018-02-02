@@ -14,15 +14,20 @@
  
   1.通用JSON格式 
   
+  
    {
    
     "data": Object,   //响应结果
+    
     
     "reqId": "311f9ffe5319445b8b939c17b637c62d", //请求编号ID
+    
     
     "resCode": 1,  //请求响应编码( 1 :成功， 0 和其他自定义编码为失败)
     
+    
     "resMsg": "successed"   //响应结果说明
+    
     
    }
    

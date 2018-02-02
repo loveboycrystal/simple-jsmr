@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loveboy.sys.user.dao.ISysUserInfoDaoMapper">
+
+	<insert id="addSysUserInfo" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loveboy.sys.user.form.vo.SysUserInfoVo">
+		insert into sys_user_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="lastLoginTime != null">
+				LAST_LOGIN_TIME,
+			</if>
+			<if test="departId != null">
+				depart_Id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="phone != null">
+				#{phone},
+			</if>
+			<if test="address != null">
+				#{address},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="lastLoginTime != null">
+				#{lastLoginTime},
+			</if>
+			<if test="departId != null">
+				#{departId},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateSysUserInfo" parameterType="com.loveboy.sys.user.form.vo.SysUserInfoVo">
+		update sys_user_info
+		<set>
+			<if test="name != null">
+				name=#{name},
+			</if>
+			<if test="phone != null">
+				phone=#{phone},
+			</if>
+			<if test="address != null">
+				address=#{address},
+			</if>
+			<if test="createTime != null">
+				create_Time=#{createTime},
+			</if>
+			<if test="lastLoginTime != null">
+				last_Login_Time=#{lastLoginTime},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="getSysUsers" resultType="com.loveboy.sys.user.form.query.SysUserVoForm"
+		parameterType="com.loveboy.sys.user.form.vo.SysUserVo">
+		SELECT
+		l.id,
+		l.account,
+		l.wx_id,
+		l.qq_id,
+		l.wb_id,
+		l.type,
+		l.STATUS,
+		l.user_from,
+		l.create_time,
+		l.last_login_time,
+		l.user_info_id,
+		i.NAME,
+		i.phone,
+		i.address,
+		i.depart_Id,
+		d.name as departName
+		FROM
+		sys_user_login l
+		INNER JOIN
+		sys_user_info i ON l.USER_INFO_ID = i.id left join
+		sys_depart d on d.id=i.depart_id
+		<where>
+			<if test="id != null">
+				and l.id =#{id}
+			</if>
+			<if test="account != null and account!=''">
+				and l.account like concat('%',#{account},'%')
+			</if>
+			<if test="name != null and name!=''">
+				and i.name like concat('%',#{name},'%')
+			</if>
+			<if test="type != null">
+				and l.type = #{type}
+			</if>
+			<if test="phone != null and phone!=''">
+				and phone like concat(#{phone},'%')
+			</if>
+			<if test="startTime!=null">
+		<![CDATA[     
+		and UNIX_TIMESTAMP(l.create_time)>=UNIX_TIMESTAMP(#{startTime}) 
+		]]>
+			</if>
+			<if test="endTime!=null">
+		<![CDATA[     
+		and UNIX_TIMESTAMP(l.create_time) <=UNIX_TIMESTAMP(#{endTime})
+		]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="getSysUserById" resultType="com.loveboy.sys.user.form.vo.SysUserVo">
+		SELECT
+		l.id,
+		l.account,
+		l.wx_id,
+		l.qq_id,
+		l.wb_id,
+		l.type,
+		l.STATUS,
+		l.user_from,
+		l.create_time,
+		l.last_login_time,
+		l.user_info_id,
+		i.NAME,
+		i.phone,
+		i.address,
+		i.depart_Id,
+		d.name as departName
+		FROM
+		sys_user_login l
+		INNER JOIN
+		sys_user_info i ON l.USER_INFO_ID = i.id inner join sys_depart d on
+		d.id=i.depart_id
+		where l.id=#{id}
+	</select>
+</mapper>

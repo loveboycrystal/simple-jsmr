@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<!-- saved from url=(0023)http://json.phpddt.com/ -->
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Expires" content="0">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-control" content="no-cache">
+		<meta http-equiv="Cache" content="no-cache">
+		<script type="text/javascript" src="./source/jquery.js"></script>
+		<title>壹号课堂API调试工具2.0</title>
+		<meta name="Description" content="HTTP 接口测试！">
+
+		<style type="text/css">
+			td {
+				height: 60px;
+				line-height: 60px;
+				padding-left: 10px;
+				border: 1px solid #c5e2f2;
+				border-left: 0px;
+				vertical-align: top;
+			}
+			
+			.navDiv {
+				/*width: 250px;*/
+				width: 250px;
+				height: 100%;
+				border: 1px solid gray;
+				padding: 10px 4px;
+				overflow-y: scroll;
+				background-color: #FAFAFA;
+			}
+			
+			#interFaceList a:hover {
+				color: #7ba316;
+			}
+			
+			.navSelected {}
+			
+			.navSelected a {
+				color: #7ba316;
+				font-weight: bold;
+			}
+			#restableCss{
+				border : solid 1px #d9edf7;	
+				margin:0;border-collapse:collapse;border-spacing:0;
+				width:60%
+			}
+			#restableCss td{
+				border : solid 1px #d9edf7;	
+				text-align : center;
+				height : 30px;
+				line-height: 30px;
+			}
+			#restableCss th{
+				border : solid 1px #d9edf7;	
+				text-align : center;
+				height : 30px;
+				line-height: 30px;
+			}
+			caption{
+				height:30px;
+				font-weight:bold;
+				font-size:18px;	
+			}
+		</style>
+
+<script type="text/javascript" src="./source/jbase64.js"></script>
+		<!--这此添加model中的js-->
+		<script type="text/javascript" src="model/lishengte.js"></script>
+		<script type="text/javascript" src="model/xuzhaojie.js" ></script>
+		<script type="text/javascript" src="model/huangshuhong.js" ></script>
+		<!--end-->
+		<script type="text/javascript" src="model/commonmodel.js"></script>
+		<script type="text/javascript" src="./source/apitest.js"></script>
+		<script src="./source/c.js" type="text/javascript"></script>
+		<script src="./source/m.js"></script>
+		<link href="./source/global.css" rel="stylesheet" type="text/css">
+		<link href="./source/normal.css" rel="stylesheet" type="text/css">
+		<link href="./source/json.css" type="text/css" rel="stylesheet">
+		<script src="./source/logger.js"></script>
+		<script src="./source/addtocite.js"></script>
+		<script src="./source/logger.js"></script>
+		
+		
+		<link rel="stylesheet" type="text/css" href="./source/addtocite.css">
+		<link href="./source/bdsstyle.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body>
+
+		<div id="wrap" class="w1050">
+			<div id="interFaceList" style="dislay:none"></div>
+			<div class="box w1050">
+				<div class="box_title" style="height: 35px; line-height: 35px; padding-left: -4px; background: #d9edf7">
+					<h1>
+						API调试工具<span style="font-size:12px;margin-left:20px;color:  #7ba316" id="curPath"></span>
+					</h1>
+				</div>
+				<div class="HeadersRow" style="padding: 30px 0px">
+					<select style="height: 30px; width: 120px; float: left; margin-left: 20px;margin-top:6px" id="submitType">
+						<option value="POST">
+							POST
+						</option>
+						
+						<option value="GET">
+							GET
+						</option>
+					</select>
+					<input type="text" style="height: 28px; width: 500px; margin-left: 20px" id="btnUrl" />
+					<input type="Button" value="发送" onclick="testApi();" id="btnSend" style="background: #007BCC; cursor:pointer;color: white; font-weight: bold; padding: 10px 24px; border: 1px solid #cccccc; border-radius: 4px;; margin-left: 20px" />
+					<br/><br/>
+					<div style="float:right;display:none" id="loginMsg">
+						<font size="2">(温馨提示：请先登录接口所在系统,才能正常测试.
+							<a href="javascript:goLogin()" style="color:blue">去登录.</a>)</font>
+					</div>
+					<textarea id="RawJson" style="display: none" style="width:100%;border: 0;"></textarea>
+				</div>
+
+				<table cellpadding="0" cellspacing="0" style="height: 35px; line-height: 35px; width: 100%; margin-bottom: 4px;" id="paramTable">
+					<tr style="background: #d9edf7; font-size: 14px; color: #007BCC; font-weight: bold;">
+						<th style="width: 35%; padding-left: 18px">
+							URL Parameter Key
+						</th>
+						<th style="width: 65%; padding-left: 18px">
+							Value
+						</th>
+					</tr>
+					<tr id="param0">
+						<td>
+							<input type="checkbox" style="margin-right:10px" value="1" checked=true title="不勾选为屏蔽此参数" />
+							<input type="text" style="height: 26px; width: 300px;" />
+						</td>
+						<td>
+							<input type="text" style="height: 26px; width: 200px;" />
+							<input type="Button" value="X" trId="param0" onclick="delParamRow('param0')" style="margin-left: 10px; background: gray; cursor: pointer; color: white; font-weight: bold; padding: 1px; border: 1px solid #cccccc; border-radius: 18px;">
+						</td>
+					</tr>
+				</table>
+				<div>
+					<br />
+					<input type="Button" value="增加" onclick="addParamRow()" style="background: #7ba316; color: white; font-weight: bold; padding:4px 18px; border: 1px solid #cccccc; border-radius: 4px;; margin-left: 20px" />
+				</div>
+				<br />
+				<div>
+					<table border="0" width="100%">
+						<tr>
+							<td><textarea  rows="4" id="encoderTa" cols="50">{"pageParamVo":{"pageNum":1,"pageSize":10},"name":"子"}</textarea></td>	
+							<td>
+								<input type="Button" value="<<解密" onclick="myDecoder()" style="background: #33acad; color: white; font-weight: bold; padding:4px 18px; border: 1px solid #33acad; border-radius: 4px;; margin-left: 20px" />
+							  <input type="Button" value="加密>>" onclick="myEncoder()" style="background: #0033ff; color: white; font-weight: bold; padding:4px 18px; border: 1px solid #0033ff; border-radius: 4px;; margin-left: 20px" />
+						 </td>	
+							<td><textarea rows="4" id="decoderTa" cols="50">eyJwYWdlUGFyYW1WbyI6eyJwYWdlTnVtIjoxLCJwYWdlU2l6ZSI6MTB9LCJuYW1lIjoi5a2QIn0=</textarea></td>	
+						</tr>
+					</table>
+					
+					
+				</div>
+				<br />
+				<div id="ControlsRow" name="ControlsRow" style="height: 35px; line-height: 35px; padding-left: 10px; background: #d9edf7">
+
+					<input type="Button" value="格式化" onclick="Process();" style="display: none; background: #007BCC; color: white; font-weight: bold; padding: 4px 8px; border: 1px solid #cccccc; border-radius: 4px;">
+
+					<span id="TabSizeHolder"> 缩进量 <select id="TabSize" onchange="TabSizeChanged()">
+							<option value="1">
+								1
+							</option>
+
+							<option value="2" selected="true">
+								2
+							</option>
+
+							<option value="3">
+								3
+							</option>
+
+							<option value="4">
+								4
+							</option>
+
+							<option value="5">
+								5
+							</option>
+
+							<option value="6">
+								6
+							</option>
+
+						</select> </span>
+
+					<label for="QuoteKeys">
+						<input type="checkbox" id="QuoteKeys" onclick=	QuoteKeysClicked();checked="true">
+						引号
+					</label> &nbsp;
+					<a href="javascript:void(0);" onclick=S electAllClicked();>全选</a>
+					&nbsp;
+					<span id="CollapsibleViewHolder"> <label for="CollapsibleView">
+							<input type="checkbox" id="CollapsibleView"	onclick="CollapsibleViewClicked();" checked="true">
+							显示控制
+						</label> </span>
+					<span id="CollapsibleViewDetail"> <a href="javascript:void(0);" onclick="ExpandAllClicked();">展开</a>
+						<a href="javascript:void(0);" onclick="CollapseAllClicked();">叠起</a>
+						<a href="javascript:void(0);" onclick="CollapseLevel(3);">2级</a>
+						<a href="javascript:void(0);" onclick="CollapseLevel(4);">3级</a>
+						<a	href="javascript:void(0);" onclick="CollapseLevel(5);">4级</a>
+						<a	href="javascript:void(0);" onclick="CollapseLevel(6);">5级</a>
+						<a	href="javascript:void(0);" onclick="CollapseLevel(7);">6级</a>
+						<a	href="javascript:void(0);" onclick="CollapseLevel(8);">7级</a> 
+						<a	href="javascript:void(0);" onclick="CollapseLevel(9);">8级</a>
+					</span>
+
+				</div>
+			<div id="Canvas" class="Canvas" style="">
+
+			</div>
+			<div id="responseMemo">
+				
+			</div>
+			</div>
+
+		
+
+			<div class="box w1050"  style="display: none;">
+
+				<div class="box_title">
+					<h2>
+						JSON介绍
+					</h2>
+				</div>
+
+				<div class="box_body" >
+					<p class="description_p">
+						JSON是一种轻量级的数据交换格式，用于描述数据结构，它基于文本格式，易于解析和生成。
+					</p>
+					<p class="description_p" style="font-weight: bold">
+						JSON有两种结构
+					</p>
+					<p class="description_p">
+						json简单说就是javascript中的对象和数组，所以这两种结构就是对象和数组两种结构，通过这两种结构可以表示各种复杂的结构
+					</p>
+					<p class="description_p">
+						&nbsp;&nbsp;&nbsp;&nbsp;1、对象：对象在js中表示为“{}”括起来的内容，数据结构为 {key：value,key：value,...}的键值对的结构，在面向对象的语言中，key为对象的属性，value为对应的属性值，所以很容易理解，取值方法为 对象.key 获取属性值，这个属性值的类型可以是 数字、字符串、数组、对象几种。
+					</p>
+					<p class="description_p">
+						&nbsp;&nbsp;&nbsp;&nbsp;2、数组：数组在js中是中括号“[]”括起来的内容，数据结构为 ["java","javascript","vb",...]，取值方式和所有语言中一样，使用索引获取，字段值的类型可以是 数字、字符串、数组、对象几种。 经过对象、数组2种结构就可以组合成复杂的数据结构了。
+					</p>
+					<p></p>
+				</div>
+			</div>
+		</div>
+	</body>

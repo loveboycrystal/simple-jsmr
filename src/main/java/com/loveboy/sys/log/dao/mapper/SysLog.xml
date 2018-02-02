@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loveboy.sys.log.dao.LogsDaoMapper">
+
+	<select id="getSysLogsList" resultType="com.loveboy.commons.base.form.vo.LogInfoVo"
+		parameterType="com.loveboy.sys.log.from.query.LogQueryForm">
+		SELECT
+		*
+		FROM SYS_PROXY_LOG_INFO sl left join
+		<if test="requestType == null or requestType == 1 ">
+			sys_user_info u    <!-- 系统日志 -->
+		</if>
+		<if test="requestType == 0 ">
+			yh_user_info u     <!-- 业务日志 -->
+		</if>
+		on sl.user_id = u.id
+		WHERE 1=1
+		<if test="requestType == null or requestType == 1  ">
+			and sl.request_type=1
+		</if>
+
+		<if test="requestType == 0 ">
+			and sl.request_type=0
+		</if>
+
+		<if test="businessId != ''  and businessId != null ">
+			and BUSINESS_ID = #{businessId}
+		</if>
+
+		<if test="userId != null ">
+			and USER_ID = #{userId}
+		</if>
+
+		<if test="doneStatus != null  and doneStatus !=''">
+			and DONE_STATUS = #{doneStatus}
+		</if>
+
+		<if test="startTime != null">
+			and req_date >= #{startTime}
+		</if>
+
+		<if test="endTime != null">
+			and req_date &lt; = #{endTime}
+		</if>
+		order by sl.req_date desc
+	</select>
+	<select id="selectLogs" parameterType="com.loveboy.commons.base.form.vo.LogInfoVo"
+		resultType="com.loveboy.commons.base.form.vo.LogInfoVo">
+		select
+		REQ_ID,
+		REQ_URL,
+		REQ_METHOD,
+		REQ_PARAM ,
+		REQ_IP ,
+		REQ_DATE,
+		RESP_DATA,
+		RESP_DATE,
+		DONE_STATUS,
+		ERR_MSG,
+		BUSINESS_ID,
+		MODULE_NAME ,
+		DESCRIPTION ,
+		user_id,
+		Request_Type
+		from sys_proxy_log_info
+		<where>
+			<if test="startTime!=null">
+		<![CDATA[     
+		and UNIX_TIMESTAMP(REQ_DATE)>=UNIX_TIMESTAMP(#{startTime}) 
+		]]>
+			</if>
+			<if test="endTime!=null">
+		<![CDATA[     
+		and UNIX_TIMESTAMP(REQ_DATE) <=UNIX_TIMESTAMP(#{endTime})
+		]]>
+			</if>
+			<if test="userId != null and userId !=''">
+				and user_id =#{userId}
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loveboy.sys.user.dao.IUserDaoMapper">
+
+	  <select  id="getUsersList" resultType="com.loveboy.sys.user.form.vo.SysUserLoginVo" parameterType="java.util.Map">   
+	 	 SELECT 
+			ACCOUNT,
+			CREATE_TIME,
+			TYPE
+		 FROM SYS_USER_LOGIN  WHERE ACCOUNT like '%${account}%'
+	  </select>   
+	  
+	  <select  id="getSysUserInfoList" resultType="com.loveboy.sys.user.form.vo.SysUserInfoVo"  parameterType="com.loveboy.sys.user.form.query.SysUserForm">   
+	 	 SELECT *  FROM SYS_USER_INFO  WHERE 1=1  
+	 	  <if test="phone != null">
+	 	  	and PHONE like concat(#{phone},'%') 
+	 	 </if>  
+	 	  <if test="name != null">
+	 	  	and NAME like concat('%',#{name},'%') 
+	 	 </if>  
+	 	 order by ID asc
+	  </select> 
+	  
+	  <insert id="addSysUserLoginInfo"  useGeneratedKeys="true" keyProperty="id" parameterType="com.loveboy.sys.user.form.vo.SysUserLoginVo">
+	  		insert into sys_user_login
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="account != null">
+				account,
+			</if>
+			<if test="wxId != null">
+				wx_id,
+			</if>
+			<if test="qqId != null">
+				qq_id,
+			</if>
+			<if test="wbId != null">
+				wb_id,
+			</if>
+			<if test="pwd != null">
+				pwd,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="userFrom != null">
+				user_from,
+			</if>
+			<if test="lastLoginTime != null">
+				last_Login_Time,
+			</if>
+			<if test="userInfoId != null">
+				user_Info_Id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="account != null">
+				#{account},
+			</if>
+			<if test="wxId != null">
+				#{wxId},
+			</if>
+			<if test="qqId != null">
+				#{qqId},
+			</if>
+			<if test="wbId != null">
+				#{wbId},
+			</if>
+			<if test="pwd != null">
+				#{pwd},
+			</if>
+			<if test="type != null">
+				#{type},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="userFrom != null">
+				#{userFrom},
+			</if>
+			<if test="lastLoginTime != null">
+				#{lastLoginTime},
+			</if>
+			<if test="userInfoId != null">
+				#{userInfoId},
+			</if>
+		</trim>
+	  </insert>
+	  
+	  <select id="selectSysUserLoginInfoByAccount" parameterType="java.lang.String"
+		resultType="com.loveboy.sys.user.form.vo.SysUserLoginVo">
+		select
+		id,
+		account,
+		wx_id,
+		qq_id,
+		wb_id,
+		pwd,
+		type,
+		status,
+		create_time,
+		user_from,
+		last_login_time,
+		user_info_id
+		from sys_user_login
+		where account = #{account} limit 1
+	</select>
+	
+	<select id="selectSysUserLoginInfoByQQ" parameterType="java.lang.String"
+		resultType="com.loveboy.sys.user.form.vo.SysUserLoginVo">
+		select
+		id,
+		account,
+		wx_id,
+		qq_id,
+		wb_id,
+		pwd,
+		type,
+		status,
+		create_time,
+		user_from,
+		last_login_time,
+		user_info_id
+		from sys_user_login
+		where qq_id = #{qq} limit 1
+	</select>
+	
+	<select id="selectSysUserLoginInfoByWB" parameterType="java.lang.String"
+		resultType="com.loveboy.sys.user.form.vo.SysUserLoginVo">
+		select
+		id,
+		account,
+		wx_id,
+		qq_id,
+		wb_id,
+		pwd,
+		type,
+		status,
+		create_time,
+		user_from,
+		last_login_time,
+		user_info_id
+		from sys_user_login
+		where wb_id = #{wb} limit 1
+	</select>
+	
+	<select id="selectSysUserLoginInfoByWX" parameterType="java.lang.String"
+		resultType="com.loveboy.sys.user.form.vo.SysUserLoginVo">
+		select
+		id,
+		account,
+		wx_id,
+		qq_id,
+		wb_id,
+		pwd,
+		type,
+		status,
+		create_time,
+		user_from,
+		last_login_time,
+		user_info_id
+		from sys_user_login
+		where wx_id = #{wx} limit 1
+	</select>
+	  
+	  <update id="updateSysUserLoginInfo" parameterType="com.loveboy.sys.user.form.vo.SysUserLoginVo">
+		update sys_user_login
+		<set>
+			<if test="account != null">
+				account=#{account},
+			</if>
+			<if test="wxId != null">
+				wx_Id=#{wxId},
+			</if>
+			<if test="qqId != null">
+				qq_Id=#{qqId},
+			</if>
+			<if test="wbId != null">
+				wb_Id=#{wbId},
+			</if>
+			<if test="pwd != null">
+				pwd=#{pwd},
+			</if>
+			<if test="type != null">
+				type=#{type},
+			</if>
+			<if test="status != null">
+				status=#{status},
+			</if>
+			<if test="createTime != null">
+				create_Time=#{createTime},
+			</if>
+			<if test="userFrom != null">
+				user_From=#{userFrom},
+			</if>
+			<if test="lastLoginTime != null">
+				last_Login_Time=#{lastLoginTime},
+			</if>
+			<if test="userInfoId != null">
+				user_Info_Id=#{userInfoId},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>
